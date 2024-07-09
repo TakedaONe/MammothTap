@@ -1,4 +1,3 @@
-// CounterFragment.java
 package com.example.hw32;
 
 import android.content.Context;
