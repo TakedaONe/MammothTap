@@ -1,4 +1,3 @@
-// CounterFragment.java
 package com.example.hw32;
 
 import android.content.Context;
@@ -17,13 +16,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CounterFragment extends Fragment {
     private static final String PREFS_NAME = "counter_prefs";
     private static final String KEY_COUNTER = "counter";
+    private static final String KEY_INVENTORY = "inventory";
     private int counter = 0;
     private TextView tvCounter;
     private ArrayList<Integer> inventoryImages;
+    private Random random;
 
     @Nullable
     @Override
@@ -34,7 +36,8 @@ public class CounterFragment extends Fragment {
         Button btnDecrement = view.findViewById(R.id.btn_decrement);
         Button btnInventory = view.findViewById(R.id.btn_inventory);
 
-        inventoryImages = new ArrayList<>();
+        random = new Random();
+        inventoryImages = loadInventory();
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         counter = sharedPreferences.getInt(KEY_COUNTER, 0);
@@ -46,7 +49,12 @@ public class CounterFragment extends Fragment {
                 counter++;
                 tvCounter.setText(String.valueOf(counter));
                 saveCounterValue();
-                inventoryImages.add(R.drawable.item_to_inventory);
+
+                Integer rarity = getRandomRarity();
+                if (rarity != null) {
+                    inventoryImages.add(rarity);
+                    saveInventory();
+                }
             }
         });
 
@@ -81,5 +89,48 @@ public class CounterFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_COUNTER, counter);
         editor.apply();
+    }
+
+    private ArrayList<Integer> loadInventory() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String serializedInventory = sharedPreferences.getString(KEY_INVENTORY, "");
+        ArrayList<Integer> inventory = new ArrayList<>();
+        if (!serializedInventory.isEmpty()) {
+            String[] items = serializedInventory.split(",");
+            for (String item : items) {
+                inventory.add(Integer.parseInt(item));
+            }
+        }
+        return inventory;
+    }
+
+    private void saveInventory() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        StringBuilder serializedInventory = new StringBuilder();
+        for (int item : inventoryImages) {
+            serializedInventory.append(item).append(",");
+        }
+        editor.putString(KEY_INVENTORY, serializedInventory.toString());
+        editor.apply();
+    }
+
+    private Integer getRandomRarity() {
+        int rarity;
+        int roll = random.nextInt(1000000) + 1;
+
+        if (roll == 1) {
+            rarity = R.drawable.circular_button_legend_background;
+        } else if (roll <= 10) {
+            rarity = R.drawable.circular_button_epic_background;
+        } else if (roll <= 334) {
+            rarity = R.drawable.circular_button_rare_background;
+        } else if (roll <= 2000) {
+            rarity = R.drawable.circular_button_background;
+        } else {
+            return null;
+        }
+
+        return rarity;
     }
 }

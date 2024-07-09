@@ -10,7 +10,8 @@
         android:numColumns="5"
         android:horizontalSpacing="4dp"
         android:verticalSpacing="2dp"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:layout_marginStart="20dp"/>
 
     <Button
         android:id="@+id/btn_back"

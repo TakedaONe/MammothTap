@@ -1,4 +1,3 @@
-// InventoryFragment.java
 package com.example.hw32;
 
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.widget.GridView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -18,10 +16,10 @@ public class InventoryFragment extends Fragment {
     private static final String ARG_IMAGES = "inventory_images";
     private ArrayList<Integer> inventoryImages;
 
-    public static InventoryFragment newInstance(ArrayList<Integer> inventoryImages) {
+    public static InventoryFragment newInstance(ArrayList<Integer> images) {
         InventoryFragment fragment = new InventoryFragment();
         Bundle args = new Bundle();
-        args.putIntegerArrayList(ARG_IMAGES, inventoryImages);
+        args.putIntegerArrayList(ARG_IMAGES, images);
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,7 +28,6 @@ public class InventoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
-
         if (getArguments() != null) {
             inventoryImages = getArguments().getIntegerArrayList(ARG_IMAGES);
         }
@@ -43,8 +40,7 @@ public class InventoryFragment extends Fragment {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getParentFragmentManager();
-                fragmentManager.popBackStack();
+                getParentFragmentManager().popBackStack();
             }
         });
 
