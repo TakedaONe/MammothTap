@@ -48,5 +48,14 @@
         android:layout_centerHorizontal="true"
         android:text="@string/топ"
         />
+
+    <Button
+        android:id="@+id/btn_solo_leveling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Поднятие_уровня"
+        android:layout_toRightOf="@+id/btn_top_list"
+        android:layout_marginStart="24dp"
+        />
 </RelativeLayout>
  
